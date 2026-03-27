@@ -1,0 +1,160 @@
+<!--pages/product/detail/index.wxml - 商品详情页-->
+<view class="detail-page" wx:if="{{!loading && product}}">
+
+  <!-- 商品图片轮播 -->
+  <view class="image-swiper-wrap">
+    <swiper
+      class="image-swiper"
+      autoplay="{{imageList.length > 1}}"
+      interval="3000"
+      circular="{{imageList.length > 1}}"
+      bindchange="onImageChange"
+    >
+      <swiper-item
+        wx:for="{{imageList}}"
+        wx:key="*this"
+        bindtap="previewImage"
+        data-index="{{index}}"
+      >
+        <!-- 真实图片 -->
+        <image
+          wx:if="{{item === '__placeholder_1__' || item === '__placeholder_2__' || item === '__placeholder_3__' ? false : true}}"
+          class="swiper-img"
+          src="{{item}}"
+          mode="aspectFill"
+        />
+        <!-- 占位1：主图位 -->
+        <view wx:if="{{item === '__placeholder_1__'}}" class="img-placeholder img-placeholder-1">
+          <text class="img-placeholder-emoji">🛍️</text>
+          <text class="img-placeholder-title">商品主图</text>
+          <text class="img-placeholder-text">暂未上传图片</text>
+        </view>
+        <!-- 占位2：细节图 -->
+        <view wx:if="{{item === '__placeholder_2__'}}" class="img-placeholder img-placeholder-2">
+          <text class="img-placeholder-emoji">🔍</text>
+          <text class="img-placeholder-title">商品细节</text>
+          <text class="img-placeholder-text">暂未上传图片</text>
+        </view>
+        <!-- 占位3：场景图 -->
+        <view wx:if="{{item === '__placeholder_3__'}}" class="img-placeholder img-placeholder-3">
+          <text class="img-placeholder-emoji">✨</text>
+          <text class="img-placeholder-title">使用场景</text>
+          <text class="img-placeholder-text">暂未上传图片</text>
+        </view>
+      </swiper-item>
+    </swiper>
+    <!-- 图片指示器 -->
+    <view class="image-indicator" wx:if="{{imageList.length > 1}}">
+      <text class="indicator-text">{{currentImage + 1}}/{{imageList.length}}</text>
+    </view>
+    <!-- 售罄蒙层 -->
+    <view class="sold-out-mask" wx:if="{{product.stock <= 0}}">
+      <text class="sold-out-text">已售罄</text>
+    </view>
+  </view>
+
+  <!-- 商品基本信息 -->
+  <view class="info-card">
+    <!-- 价格区域 -->
+    <view class="price-section">
+      <view class="price-main">
+        <text class="price-symbol">¥</text>
+        <text class="price-num">{{priceStr}}</text>
+      </view>
+      <text class="original-price" wx:if="{{originalPriceStr}}">¥{{originalPriceStr}}</text>
+      <view class="sale-badge" wx:if="{{product.originalPrice && product.originalPrice > product.price}}">
+        <text class="sale-text">特惠</text>
+      </view>
+    </view>
+
+    <!-- 商品名称 -->
+    <text class="product-name">{{product.name}}</text>
+
+    <!-- 商品描述 -->
+    <text class="product-desc" wx:if="{{product.description}}">{{product.description}}</text>
+
+    <!-- 销量 & 库存 -->
+    <view class="product-meta">
+      <text class="meta-item">已售 {{product.sales || 0}} 件</text>
+      <text class="meta-divider">|</text>
+      <text class="meta-item" wx:if="{{product.stock > 0}}">库存 {{product.stock}} 件</text>
+      <text class="meta-item meta-sold-out" wx:else>暂时缺货</text>
+    </view>
+  </view>
+
+  <!-- 购买数量 -->
+  <view class="section-card">
+    <view class="section-row">
+      <text class="section-label">购买数量</text>
+      <view class="quantity-control">
+        <view
+          class="qty-btn {{quantity <= 1 ? 'qty-btn-disabled' : ''}}"
+          bindtap="decreaseQuantity"
+        >
+          <text>－</text>
+        </view>
+        <input
+          class="qty-input"
+          type="number"
+          value="{{quantity}}"
+          bindinput="onQuantityInput"
+        />
+        <view
+          class="qty-btn {{quantity >= product.stock ? 'qty-btn-disabled' : ''}}"
+          bindtap="increaseQuantity"
+        >
+          <text>＋</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 商品详情富文本 -->
+  <view class="section-card" wx:if="{{product.detail}}">
+    <view class="section-title">商品详情</view>
+    <rich-text nodes="{{product.detail}}" class="rich-content"></rich-text>
+  </view>
+
+  <!-- 无详情时的占位 -->
+  <view class="section-card" wx:else>
+    <view class="section-title">商品详情</view>
+    <view class="detail-placeholder">
+      <text class="placeholder-emoji">🛒</text>
+      <text class="placeholder-text">暂无详细介绍</text>
+    </view>
+  </view>
+
+  <!-- 底部安全区 -->
+  <view style="height: 160rpx;"></view>
+</view>
+
+<!-- 加载中 -->
+<view class="loading-wrap" wx:if="{{loading}}">
+  <view class="loading-spinner"></view>
+  <text class="loading-text">加载中...</text>
+</view>
+
+<!-- 底部操作栏 -->
+<view class="bottom-bar" wx:if="{{!loading && product}}">
+  <!-- 购物车入口 -->
+  <view class="cart-entry" bindtap="goToCart">
+    <text class="cart-icon">🛒</text>
+    <text class="cart-badge" wx:if="{{cartQuantity > 0}}">{{cartQuantity}}</text>
+  </view>
+
+  <!-- 加入购物车 -->
+  <view
+    class="btn-cart {{product.stock <= 0 ? 'btn-disabled' : ''}}"
+    bindtap="addToCart"
+  >
+    <text>加入购物车</text>
+  </view>
+
+  <!-- 立即购买 -->
+  <view
+    class="btn-buy {{product.stock <= 0 ? 'btn-disabled' : ''}}"
+    bindtap="buyNow"
+  >
+    <text>立即购买</text>
+  </view>
+</view>

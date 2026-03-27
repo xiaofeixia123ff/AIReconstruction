@@ -1,0 +1,44 @@
+services:
+  # MySQL 数据库
+  mysql:
+    image: mysql:8.0
+    container_name: admin-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: Admin@123456      # root 密码
+      MYSQL_DATABASE: admin_system           # 自动创建的数据库
+      MYSQL_USER: admin                      # 普通用户
+      MYSQL_PASSWORD: Admin@123456           # 普通用户密码
+    ports:
+      - "3306:3306"                          # 映射到本机 3306 端口
+    volumes:
+      - mysql_data:/var/lib/mysql            # 数据持久化
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d  # 初始化SQL脚本目录
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    networks:
+      - admin-network
+
+  # Redis 缓存
+  redis:
+    image: redis:7.0-alpine
+    container_name: admin-redis
+    restart: always
+    ports:
+      - "6379:6379"                          # 映射到本机 6379 端口
+    volumes:
+      - redis_data:/data                     # 数据持久化
+    command: redis-server --requirepass Admin@123456  # Redis 密码
+    networks:
+      - admin-network
+
+# 数据卷（持久化存储）
+volumes:
+  mysql_data:
+    driver: local
+  redis_data:
+    driver: local
+
+# 网络
+networks:
+  admin-network:
+    driver: bridge

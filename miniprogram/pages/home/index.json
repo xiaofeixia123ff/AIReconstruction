@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "鲜果超市",
+  "navigationBarBackgroundColor": "#FF6B35",
+  "navigationBarTextStyle": "white",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark"
+}

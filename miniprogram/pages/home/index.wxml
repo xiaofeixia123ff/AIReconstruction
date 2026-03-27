@@ -1,0 +1,159 @@
+<!--pages/home/index.wxml - 首页-->
+<view class="home-page">
+
+  <!-- 搜索栏 -->
+  <view class="search-bar" bindtap="goToSearch">
+    <view class="search-inner">
+      <text class="search-icon">🔍</text>
+      <text class="search-placeholder">搜索新鲜食材...</text>
+    </view>
+  </view>
+
+  <!-- 轮播图 -->
+  <swiper
+    class="banner-swiper"
+    autoplay
+    interval="3000"
+    circular
+    indicator-dots
+    indicator-color="rgba(255,255,255,0.5)"
+    indicator-active-color="#FF6B35"
+    bindchange="onBannerChange"
+  >
+    <swiper-item wx:for="{{banners}}" wx:key="id">
+      <view class="banner-item banner-placeholder">
+        <text class="banner-text">🛒 鲜果超市 - 品质保证</text>
+      </view>
+    </swiper-item>
+  </swiper>
+
+  <!-- 优惠券横幅 -->
+  <view class="coupon-banner" bindtap="goToCoupon">
+    <text class="coupon-icon">🎁</text>
+    <text class="coupon-text">新用户专属优惠券，最高减50元</text>
+    <text class="coupon-btn">立即领取 ›</text>
+  </view>
+
+  <!-- 分类导航 -->
+  <view class="section-card">
+    <view class="category-grid">
+      <view
+        class="category-item"
+        wx:for="{{categories}}"
+        wx:key="id"
+        bindtap="goToCategory"
+        data-id="{{item.id}}"
+      >
+        <view class="category-icon-wrap">
+          <text class="category-emoji">{{item.icon || '🥦'}}</text>
+        </view>
+        <text class="category-name">{{item.name}}</text>
+      </view>
+      <!-- 无分类时的占位 -->
+      <block wx:if="{{categories.length === 0}}">
+        <view class="category-item" wx:for="{{['🥦','🍎','🥩','🐟','🥛','🥚','🍞','🧃']}}" wx:key="*this" bindtap="goToCategory">
+          <view class="category-icon-wrap">
+            <text class="category-emoji">{{item}}</text>
+          </view>
+          <text class="category-name">分类</text>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <!-- 限时特惠 -->
+  <view class="section-card" wx:if="{{flashSaleProducts.length > 0}}">
+    <view class="section-header">
+      <view class="section-title-wrap">
+        <text class="section-title">🔥 热卖特惠</text>
+        <text class="section-subtitle">限时优惠</text>
+      </view>
+      <text class="section-more" bindtap="goToCategory">更多 ›</text>
+    </view>
+    <scroll-view scroll-x class="flash-scroll">
+      <view class="flash-list">
+        <view
+          class="flash-item"
+          wx:for="{{flashSaleProducts}}"
+          wx:key="id"
+          bindtap="goToProduct"
+          data-id="{{item.id}}"
+        >
+          <view class="product-img-wrap">
+            <image
+              class="product-img"
+              src="{{item.imageUrl || ''}}"
+              mode="aspectFill"
+              lazy-load
+            />
+            <view class="sale-tag" wx:if="{{item.originalPrice}}">特惠</view>
+          </view>
+          <text class="product-name text-ellipsis">{{item.name}}</text>
+          <view class="product-price-row">
+            <text class="price-symbol">¥</text>
+            <text class="price-num">{{item.priceStr}}</text>
+          </view>
+          <text class="original-price" wx:if="{{item.originalPriceStr}}">{{item.originalPriceStr}}</text>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 营销横幅 -->
+  <view class="marketing-banner">
+    <view class="marketing-item marketing-left">
+      <text class="marketing-title">🆕 新品上市</text>
+      <text class="marketing-desc">时令新鲜食材</text>
+    </view>
+    <view class="marketing-item marketing-right">
+      <text class="marketing-title">🚚 免费配送</text>
+      <text class="marketing-desc">满99元免运费</text>
+    </view>
+  </view>
+
+  <!-- 推荐商品 -->
+  <view class="section-card">
+    <view class="section-header">
+      <text class="section-title">✨ 为你推荐</text>
+      <text class="section-more" bindtap="goToCategory">全部商品 ›</text>
+    </view>
+    <view class="product-grid">
+      <view
+        class="product-card"
+        wx:for="{{recommendProducts}}"
+        wx:key="id"
+        bindtap="goToProduct"
+        data-id="{{item.id}}"
+      >
+        <view class="product-img-wrap">
+          <image
+            class="product-img"
+            src="{{item.imageUrl || ''}}"
+            mode="aspectFill"
+            lazy-load
+          />
+        </view>
+        <view class="product-info">
+          <text class="product-name">{{item.name}}</text>
+          <text class="product-desc text-ellipsis">{{item.description || '新鲜健康'}}</text>
+          <view class="product-bottom">
+            <view class="price-wrap">
+              <text class="price-symbol">¥</text>
+              <text class="price-num">{{item.priceStr}}</text>
+            </view>
+            <view class="add-cart-btn">+</view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty-state" wx:if="{{recommendProducts.length === 0 && !loading}}">
+      <text>🛒</text>
+      <text>暂无商品</text>
+    </view>
+  </view>
+
+  <!-- 底部安全区 -->
+  <view class="safe-bottom" style="height: 120rpx;"></view>
+</view>

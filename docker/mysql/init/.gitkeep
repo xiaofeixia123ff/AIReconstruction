@@ -1,0 +1,2 @@
+# This directory is for MySQL initialization SQL scripts
+# Files ending in .sql will be executed when the container first starts
