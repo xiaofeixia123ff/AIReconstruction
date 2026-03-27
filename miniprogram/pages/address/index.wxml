@@ -1,1 +1,65 @@
-<view class='page'><text>address</text></view>
+<!--pages/address/index.wxml - 地址列表页-->
+<view class="address-page">
+
+  <!-- 空状态 -->
+  <view class="empty-wrap" wx:if="{{isEmpty}}">
+    <text class="empty-icon">📍</text>
+    <text class="empty-text">还没有收货地址</text>
+    <view class="empty-add-btn" bindtap="goAdd">添加地址</view>
+  </view>
+
+  <!-- 地址列表 -->
+  <view class="address-list" wx:else>
+    <view
+      class="address-item"
+      wx:for="{{addresses}}"
+      wx:key="index"
+      bindtap="selectAddress"
+      data-index="{{index}}"
+    >
+      <!-- 地址信息 -->
+      <view class="addr-info">
+        <view class="addr-top">
+          <text class="addr-name">{{item.name}}</text>
+          <text class="addr-phone">{{item.phone}}</text>
+          <view class="default-tag" wx:if="{{item.isDefault}}">默认</view>
+        </view>
+        <text class="addr-detail">
+          {{item.province}}{{item.city}}{{item.district}}{{item.detail}}
+        </text>
+      </view>
+
+      <!-- 操作按钮 -->
+      <view class="addr-actions" catchtap="stopPropagation">
+        <!-- 设为默认 -->
+        <view
+          class="action-default {{item.isDefault ? 'action-default-active' : ''}}"
+          catchtap="setDefault"
+          data-index="{{index}}"
+          wx:if="{{!item.isDefault}}"
+        >
+          设为默认
+        </view>
+        <!-- 编辑 -->
+        <view class="action-edit" catchtap="goEdit" data-index="{{index}}">
+          编辑
+        </view>
+        <!-- 删除 -->
+        <view class="action-delete" catchtap="deleteAddress" data-index="{{index}}">
+          删除
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部安全区 -->
+  <view style="height: 140rpx;"></view>
+</view>
+
+<!-- 底部添加按钮 -->
+<view class="bottom-bar" wx:if="{{!isEmpty}}">
+  <view class="add-btn" bindtap="goAdd">
+    <text class="add-icon">+</text>
+    <text>新增收货地址</text>
+  </view>
+</view>

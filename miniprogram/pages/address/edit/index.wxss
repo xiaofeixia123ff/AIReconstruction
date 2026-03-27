@@ -1,1 +1,180 @@
-/* edit */
+/* pages/address/edit/index.wxss - 地址编辑页样式 */
+
+.edit-page {
+  background: #F5F5F5;
+  min-height: 100vh;
+  padding-top: 16rpx;
+}
+
+/* ===== 定位按钮 ===== */
+.locate-btn {
+  background: #FFFFFF;
+  display: flex;
+  align-items: center;
+  padding: 28rpx;
+  margin-bottom: 16rpx;
+  gap: 12rpx;
+}
+
+.locate-icon {
+  font-size: 36rpx;
+}
+
+.locate-text {
+  flex: 1;
+  font-size: 28rpx;
+  color: #FF4444;
+  font-weight: 500;
+}
+
+.locate-arrow {
+  font-size: 36rpx;
+  color: #CCCCCC;
+}
+
+/* ===== 表单卡片 ===== */
+.form-card {
+  background: #FFFFFF;
+  margin-bottom: 16rpx;
+}
+
+.form-row {
+  display: flex;
+  align-items: center;
+  padding: 0 28rpx;
+  min-height: 104rpx;
+  border-bottom: 1rpx solid #F5F5F5;
+}
+
+.form-row:last-child {
+  border-bottom: none;
+}
+
+.form-row-textarea {
+  align-items: flex-start;
+  padding-top: 28rpx;
+  padding-bottom: 28rpx;
+}
+
+.form-label {
+  font-size: 28rpx;
+  color: #333333;
+  width: 160rpx;
+  flex-shrink: 0;
+}
+
+.form-input {
+  flex: 1;
+  font-size: 28rpx;
+  color: #222222;
+  height: 104rpx;
+  line-height: 104rpx;
+}
+
+.form-textarea {
+  flex: 1;
+  font-size: 28rpx;
+  color: #222222;
+  min-height: 80rpx;
+  line-height: 1.6;
+  padding-top: 4rpx;
+}
+
+.form-placeholder {
+  color: #CCCCCC;
+}
+
+/* 省市区选择器 */
+.region-picker {
+  flex: 1;
+}
+
+.picker-value {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 28rpx;
+  color: #222222;
+  height: 104rpx;
+}
+
+.picker-arrow {
+  font-size: 36rpx;
+  color: #CCCCCC;
+}
+
+/* ===== 默认地址开关 ===== */
+.default-row {
+  background: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 32rpx 28rpx;
+  margin-bottom: 16rpx;
+}
+
+.default-label {
+  font-size: 28rpx;
+  color: #333333;
+}
+
+/* 自定义开关 */
+.switch-wrap {
+  width: 96rpx;
+  height: 52rpx;
+  border-radius: 26rpx;
+  position: relative;
+  transition: background 0.3s;
+}
+
+.switch-on {
+  background: #FF4444;
+}
+
+.switch-off {
+  background: #DDDDDD;
+}
+
+.switch-thumb {
+  position: absolute;
+  top: 4rpx;
+  width: 44rpx;
+  height: 44rpx;
+  border-radius: 50%;
+  background: #FFFFFF;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.2);
+  transition: left 0.3s;
+}
+
+.switch-on .switch-thumb {
+  left: 48rpx;
+}
+
+.switch-off .switch-thumb {
+  left: 4rpx;
+}
+
+/* ===== 底部保存按钮 ===== */
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #FFFFFF;
+  padding: 20rpx 28rpx;
+  padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
+  box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.08);
+}
+
+.save-btn {
+  height: 96rpx;
+  background: linear-gradient(135deg, #FF6B35, #FF4444);
+  border-radius: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  color: #FFFFFF;
+  font-weight: bold;
+  box-shadow: 0 8rpx 24rpx rgba(255, 68, 68, 0.3);
+}

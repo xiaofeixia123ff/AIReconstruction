@@ -74,6 +74,36 @@ export class CouponService {
     return { total, enabled, disabled, totalUsed };
   }
 
+  /** Get my coupons (mini program) */
+  async getMyCoupons(memberId: number, status?: string) {
+    const qb = this.recordRepo.createQueryBuilder('r');
+    qb.where('r.memberId = :memberId', { memberId });
+
+    // Map string status to number
+    if (status === 'unused') {
+      qb.andWhere('r.status = 0');
+    } else if (status === 'used') {
+      qb.andWhere('r.status = 1');
+    } else if (status === 'expired') {
+      qb.andWhere('r.status = 2');
+    }
+
+    qb.orderBy('r.createdAt', 'DESC');
+    const records = await qb.getMany();
+
+    // Attach coupon detail to each record
+    const couponIds = [...new Set(records.map(r => r.couponId))];
+    const coupons = couponIds.length > 0
+      ? await this.couponRepo.findByIds(couponIds)
+      : [];
+    const couponMap = new Map(coupons.map(c => [c.id, c]));
+
+    return records.map(r => ({
+      ...r,
+      coupon: couponMap.get(r.couponId) || null,
+    }));
+  }
+
   /** Get coupon records (who received/used) */
   async getRecords(couponId: number, page = 1, pageSize = 10) {
     const [list, total] = await this.recordRepo.findAndCount({

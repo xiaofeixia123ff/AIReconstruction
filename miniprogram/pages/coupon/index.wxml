@@ -1,1 +1,64 @@
-<view class='page'><text>coupon</text></view>
+<!--pages/coupon/index.wxml - 我的优惠券页-->
+<view class="coupon-page">
+
+  <!-- Tab 栏 -->
+  <view class="tab-bar">
+    <view
+      class="tab-item {{activeTab === index ? 'tab-item-active' : ''}}"
+      wx:for="{{tabs}}"
+      wx:key="key"
+      bindtap="switchTab"
+      data-index="{{index}}"
+    >
+      <text class="tab-text">{{item.label}}</text>
+      <view class="tab-line" wx:if="{{activeTab === index}}"></view>
+    </view>
+  </view>
+
+  <!-- 优惠券列表 -->
+  <scroll-view class="coupon-scroll" scroll-y>
+
+    <!-- 空状态 -->
+    <view class="empty-wrap" wx:if="{{isEmpty && !loading}}">
+      <text class="empty-icon">🎫</text>
+      <text class="empty-text">暂无{{tabs[activeTab].label}}的优惠券</text>
+    </view>
+
+    <!-- 优惠券卡片 -->
+    <view
+      class="coupon-card {{item.isExpired || activeTab > 0 ? 'coupon-card-disabled' : ''}}"
+      wx:for="{{coupons}}"
+      wx:key="id"
+    >
+      <!-- 左侧金额 -->
+      <view class="coupon-left">
+        <view class="coupon-value-wrap">
+          <text class="coupon-symbol">¥</text>
+          <text class="coupon-value">{{item.valueStr}}</text>
+        </view>
+        <text class="coupon-condition" wx:if="{{item.minAmount > 0}}">满{{item.minAmountStr}}元可用</text>
+        <text class="coupon-condition" wx:else>无门槛</text>
+      </view>
+
+      <!-- 锯齿分隔 -->
+      <view class="coupon-divider">
+        <view class="divider-circle top"></view>
+        <view class="divider-line"></view>
+        <view class="divider-circle bottom"></view>
+      </view>
+
+      <!-- 右侧信息 -->
+      <view class="coupon-right">
+        <text class="coupon-name">{{item.name || '优惠券'}}</text>
+        <text class="coupon-desc" wx:if="{{item.description}}">{{item.description}}</text>
+        <text class="coupon-expire">{{item.expireDateStr}} 到期</text>
+        <!-- 状态标签 -->
+        <view class="coupon-status-tag" wx:if="{{activeTab === 1}}">已使用</view>
+        <view class="coupon-status-tag coupon-expired-tag" wx:elif="{{activeTab === 2}}">已过期</view>
+      </view>
+    </view>
+
+    <view style="height: 40rpx;"></view>
+  </scroll-view>
+
+</view>

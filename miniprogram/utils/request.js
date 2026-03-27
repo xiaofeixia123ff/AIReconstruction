@@ -5,6 +5,9 @@ const app = getApp()
 // loading 计数器，解决并发请求时 showLoading/hideLoading 不配对问题
 let loadingCount = 0
 
+// 防止 401 重复跳转登录页
+let isRedirectingToLogin = false
+
 const showLoading = () => {
   if (loadingCount === 0) {
     wx.showLoading({ title: '加载中...', mask: true })
@@ -69,11 +72,19 @@ const request = (options = {}) => {
         if (statusCode === 200 || statusCode === 201) {
           resolve(resData)
         } else if (statusCode === 401) {
-          // token 过期，跳转登录
+          // token 过期或无效，清除登录状态并跳转登录
           wx.hideLoading()
           loadingCount = 0
           app.logout()
-          wx.navigateTo({ url: '/pages/login/index' })
+          // 防止多个并发请求同时触发跳转
+          if (!isRedirectingToLogin) {
+            isRedirectingToLogin = true
+            wx.showToast({ title: '登录已过期，请重新登录', icon: 'none' })
+            setTimeout(() => {
+              isRedirectingToLogin = false
+              wx.reLaunch({ url: '/pages/login/index' })
+            }, 1500)
+          }
           reject(new Error('登录已过期，请重新登录'))
         } else {
           const msg = resData?.message || '请求失败'

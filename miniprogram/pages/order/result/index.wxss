@@ -1,1 +1,111 @@
-/* result */
+/* pages/order/result/index.wxss - 订单结果页样式 */
+
+.result-page {
+  min-height: 100vh;
+  background: #F5F5F5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 120rpx;
+  padding-bottom: 60rpx;
+}
+
+/* ===== 结果图标 ===== */
+.result-icon-wrap {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40rpx;
+}
+
+.icon-success {
+  background: linear-gradient(135deg, #4CAF50, #66BB6A);
+  box-shadow: 0 8rpx 32rpx rgba(76, 175, 80, 0.4);
+}
+
+.icon-fail {
+  background: linear-gradient(135deg, #FF5252, #FF1744);
+  box-shadow: 0 8rpx 32rpx rgba(255, 82, 82, 0.4);
+}
+
+.result-icon {
+  font-size: 80rpx;
+  color: #FFFFFF;
+  font-weight: bold;
+  line-height: 1;
+}
+
+/* ===== 文字 ===== */
+.result-title {
+  font-size: 44rpx;
+  font-weight: bold;
+  color: #222222;
+  margin-bottom: 20rpx;
+}
+
+.result-desc {
+  font-size: 26rpx;
+  color: #999999;
+  text-align: center;
+  padding: 0 60rpx;
+  line-height: 1.6;
+}
+
+/* ===== 订单号 ===== */
+.order-no-wrap {
+  margin-top: 40rpx;
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  padding: 24rpx 40rpx;
+  display: flex;
+  align-items: center;
+}
+
+.order-no-label {
+  font-size: 24rpx;
+  color: #999999;
+}
+
+.order-no {
+  font-size: 24rpx;
+  color: #555555;
+}
+
+/* ===== 按钮组 ===== */
+.btn-group {
+  margin-top: 80rpx;
+  width: 100%;
+  padding: 0 60rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+.btn-primary {
+  height: 96rpx;
+  background: linear-gradient(135deg, #FF6B35, #FF4444);
+  border-radius: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  color: #FFFFFF;
+  font-weight: bold;
+  box-shadow: 0 8rpx 24rpx rgba(255, 68, 68, 0.3);
+}
+
+.btn-secondary {
+  height: 96rpx;
+  background: #FFFFFF;
+  border-radius: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  color: #FF4444;
+  font-weight: bold;
+  border: 2rpx solid #FF4444;
+}

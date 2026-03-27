@@ -2,7 +2,7 @@ import { Injectable, NotFoundException, BadRequestException } from '@nestjs/comm
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Like } from 'typeorm';
 import { Order, OrderStatus } from './order.entity';
-import { CreateOrderDto, UpdateOrderDto, ShipOrderDto } from './dto/order.dto';
+import { CreateOrderDto, UpdateOrderDto, ShipOrderDto, MiniAppCreateOrderDto } from './dto/order.dto';
 
 @Injectable()
 export class OrderService {
@@ -55,6 +55,41 @@ export class OrderService {
   /** Create order */
   async create(dto: CreateOrderDto): Promise<Order> {
     const order = this.orderRepository.create(dto);
+    return this.orderRepository.save(order);
+  }
+
+  /** Create order from mini program */
+  async createFromMiniApp(dto: MiniAppCreateOrderDto, member: { id: number; nickname: string; phone?: string }): Promise<Order> {
+    const { items, address, remark, totalAmount } = dto;
+
+    // Generate order number: timestamp + random 6 digits
+    const orderNo = `${Date.now()}${Math.floor(Math.random() * 900000) + 100000}`;
+
+    // Build full address string
+    const fullAddress = [address.province, address.city, address.district, address.detail]
+      .filter(Boolean)
+      .join(' ');
+
+    // Calculate pay amount (same as totalAmount for now, coupon deduction already done on frontend)
+    const payAmount = totalAmount / 100; // frontend sends in fen, convert to yuan
+    const totalAmountYuan = totalAmount / 100;
+
+    const order = this.orderRepository.create({
+      orderNo,
+      userId: member.id,
+      nickname: member.nickname,
+      phone: member.phone || address.phone,
+      totalAmount: totalAmountYuan,
+      payAmount,
+      freightAmount: 0,
+      status: OrderStatus.PENDING_PAYMENT,
+      receiverName: address.name,
+      receiverPhone: address.phone,
+      receiverAddress: fullAddress,
+      remark: remark || '',
+      itemsSnapshot: JSON.stringify(items),
+    });
+
     return this.orderRepository.save(order);
   }
 
@@ -119,6 +154,19 @@ export class OrderService {
     }
     order.status = OrderStatus.REFUNDED;
     return this.orderRepository.save(order);
+  }
+
+  /** Get orders by member id (mini program) */
+  async findByMember(memberId: number, page: number, pageSize: number, status?: number) {
+    const qb = this.orderRepository.createQueryBuilder('o');
+    qb.where('o.userId = :memberId', { memberId });
+    if (status !== undefined) {
+      qb.andWhere('o.status = :status', { status });
+    }
+    qb.orderBy('o.createdAt', 'DESC');
+    qb.skip((page - 1) * pageSize).take(pageSize);
+    const [list, total] = await qb.getManyAndCount();
+    return { list, total, page, pageSize };
   }
 
   /** Get order statistics */

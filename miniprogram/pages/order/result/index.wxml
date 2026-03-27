@@ -1,1 +1,34 @@
-<view class='page'><text>result</text></view>
+<!--pages/order/result/index.wxml - 订单结果页-->
+<view class="result-page">
+
+  <!-- 结果图标区 -->
+  <view class="result-icon-wrap {{status === 'success' ? 'icon-success' : 'icon-fail'}}">
+    <text class="result-icon">{{status === 'success' ? '✓' : '✕'}}</text>
+  </view>
+
+  <!-- 结果文字 -->
+  <text class="result-title">{{status === 'success' ? '下单成功！' : '下单失败'}}</text>
+  <text class="result-desc">
+    {{status === 'success' ? '您的订单已提交，商家正在处理中' : '订单提交失败，请重新尝试'}}
+  </text>
+
+  <!-- 订单号 -->
+  <view class="order-no-wrap" wx:if="{{orderId && status === 'success'}}">
+    <text class="order-no-label">订单编号：</text>
+    <text class="order-no">{{orderId}}</text>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="btn-group">
+    <view class="btn-primary" bindtap="goOrderDetail" wx:if="{{status === 'success'}}">
+      查看订单
+    </view>
+    <view class="btn-secondary" bindtap="goShopping">
+      继续购物
+    </view>
+    <view class="btn-primary" bindtap="goShopping" wx:if="{{status !== 'success'}}">
+      重新下单
+    </view>
+  </view>
+
+</view>

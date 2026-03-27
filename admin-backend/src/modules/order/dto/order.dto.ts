@@ -1,5 +1,71 @@
-import { IsString, IsOptional, IsNumber, IsEnum } from 'class-validator';
+import { IsString, IsOptional, IsNumber, IsEnum, IsArray, ValidateNested, IsObject } from 'class-validator';
+import { Type } from 'class-transformer';
 import { OrderStatus } from '../order.entity';
+
+/** Mini program order item */
+export class MiniAppOrderItemDto {
+  @Type(() => Number)
+  @IsNumber()
+  productId: number;
+
+  @Type(() => Number)
+  @IsNumber()
+  quantity: number;
+
+  @Type(() => Number)
+  @IsNumber()
+  price: number;
+}
+
+/** Mini program order address */
+export class MiniAppOrderAddressDto {
+  @IsString()
+  name: string;
+
+  @IsString()
+  phone: string;
+
+  @IsOptional()
+  @IsString()
+  province?: string;
+
+  @IsOptional()
+  @IsString()
+  city?: string;
+
+  @IsOptional()
+  @IsString()
+  district?: string;
+
+  @IsString()
+  detail: string;
+}
+
+/** Mini program create order DTO */
+export class MiniAppCreateOrderDto {
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => MiniAppOrderItemDto)
+  items: MiniAppOrderItemDto[];
+
+  @IsObject()
+  @ValidateNested()
+  @Type(() => MiniAppOrderAddressDto)
+  address: MiniAppOrderAddressDto;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  couponId?: number;
+
+  @IsOptional()
+  @IsString()
+  remark?: string;
+
+  @Type(() => Number)
+  @IsNumber()
+  totalAmount: number;
+}
 
 export class CreateOrderDto {
   @IsString()

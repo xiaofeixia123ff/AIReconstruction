@@ -1,1 +1,65 @@
-<view class='page'><text>category</text></view>
+<!--pages/category/index.wxml - 分类页-->
+<view class="category-page">
+
+  <!-- 左侧分类导航 -->
+  <scroll-view class="category-nav" scroll-y>
+    <view
+      class="nav-item {{activeCategory === index ? 'nav-item-active' : ''}}"
+      wx:for="{{categories}}"
+      wx:key="id"
+      bindtap="switchCategory"
+      data-index="{{index}}"
+    >
+      <view class="nav-active-bar" wx:if="{{activeCategory === index}}"></view>
+      <text class="nav-text">{{item.name}}</text>
+    </view>
+  </scroll-view>
+
+  <!-- 右侧商品列表 -->
+  <scroll-view class="product-panel" scroll-y>
+
+    <!-- 加载中 -->
+    <view class="loading-wrap" wx:if="{{productsLoading}}">
+      <text class="loading-text">加载中...</text>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty-wrap" wx:elif="{{products.length === 0}}">
+      <text class="empty-icon">🛒</text>
+      <text class="empty-text">该分类暂无商品</text>
+    </view>
+
+    <!-- 商品网格 -->
+    <view class="product-grid" wx:else>
+      <view
+        class="product-card"
+        wx:for="{{products}}"
+        wx:key="id"
+        bindtap="goDetail"
+        data-id="{{item.id}}"
+      >
+        <view class="product-img-wrap">
+          <image
+            wx:if="{{item.mainImage}}"
+            class="product-img"
+            src="{{item.mainImage}}"
+            mode="aspectFill"
+            lazy-load
+          />
+          <view wx:else class="product-img-placeholder">
+            <text>🍎</text>
+          </view>
+        </view>
+        <view class="product-info">
+          <text class="product-name">{{item.name}}</text>
+          <view class="product-price-row">
+            <text class="price-symbol">¥</text>
+            <text class="price-value">{{item.priceStr}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+  </scroll-view>
+
+</view>

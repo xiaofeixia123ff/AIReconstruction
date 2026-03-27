@@ -190,21 +190,21 @@ Page({
     try {
       const orderData = {
         items: items.map(item => ({
-          productId: item.id,
-          quantity: item.quantity,
-          price: item.price,
+          productId: Number(item.id),
+          quantity: Number(item.quantity),
+          price: Number(item.price),
         })),
         address: {
           name: address.name,
           phone: address.phone,
-          province: address.province,
-          city: address.city,
-          district: address.district,
+          province: address.province || '',
+          city: address.city || '',
+          district: address.district || '',
           detail: address.detail,
         },
-        couponId: selectedCoupon?.id || null,
+        couponId: selectedCoupon ? Number(selectedCoupon.id) : undefined,
         remark: remark || '',
-        totalAmount: payPrice,
+        totalAmount: Number(payPrice),
       }
 
       const res = await orderApi.create(orderData)

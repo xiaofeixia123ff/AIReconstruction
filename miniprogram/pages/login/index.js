@@ -45,12 +45,13 @@ Page({
         wx.showToast({ title: '登录成功', icon: 'success' })
 
         setTimeout(() => {
-          // 返回上一页或跳转到个人中心
+          // 返回上一页或跳转到首页
           const pages = getCurrentPages()
           if (pages.length > 1) {
             wx.navigateBack()
           } else {
-            wx.switchTab({ url: '/pages/profile/index' })
+            // reLaunch 过来的情况，跳回首页
+            wx.switchTab({ url: '/pages/home/index' })
           }
         }, 1000)
       } else {

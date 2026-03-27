@@ -30,9 +30,11 @@ const categoryApi = {
 
 // ==================== 订单 ====================
 const orderApi = {
-  // 创建订单
-  create: (data) => post('/api/order', data),
-  // 获取订单列表
+  // 创建订单（小程序专用）
+  create: (data) => post('/api/order/miniapp', data),
+  // 获取我的订单列表（小程序）
+  getMyList: (params) => get('/api/order/mine', params),
+  // 获取订单列表（管理员）
   getList: (params) => get('/api/order', params),
   // 获取订单详情
   getDetail: (id) => get(`/api/order/${id}`),

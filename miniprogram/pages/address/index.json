@@ -1,1 +1,5 @@
-{"navigationBarTitleText": "收货地址"}
+{
+  "navigationBarTitleText": "收货地址",
+  "navigationBarBackgroundColor": "#FFFFFF",
+  "navigationBarTextStyle": "black"
+}
